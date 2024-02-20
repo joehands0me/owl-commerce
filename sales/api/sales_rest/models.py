@@ -4,9 +4,9 @@ from address.models import AddressField
 
 
 class ProductVO(models.Model):
-    import_href = models.CharField(max_length=100, unique=True)
     item_number = models.PositiveSmallIntegerField(unique=True)
     name = models.CharField(max_length=100)
+    description = models.TextField()
     unit_price = models.PositiveSmallIntegerField()
     stock = models.PositiveSmallIntegerField()
 

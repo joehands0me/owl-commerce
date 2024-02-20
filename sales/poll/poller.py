@@ -1,3 +1,4 @@
+from sales_rest.models import ProductVO
 import django
 import os
 import sys
@@ -31,11 +32,30 @@ django.setup()
 # )
 
 
+def get_products():
+    url = "http://owl-commerce-inventory-api-1:8000/api/pellets/"
+    response = requests.get(url)
+    print(response.status_code)
+    content = json.loads(response.content)
+    print(content)
+
+    for product in content["pellets"]:
+        ProductVO.objects.update_or_create(
+            item_number=product["item_number"],
+            defaults={
+                "name": product["name"],
+                "unit_price": product["unit_price"],
+                "stock": product["stock"],
+                "description": product["description"],
+            }
+        )
+
+
 def poll():
     while True:
         print('Sales poller polling for data')
         try:
-            get_sales()
+            get_products()
 
         except Exception as e:
             print(e, file=sys.stderr)
